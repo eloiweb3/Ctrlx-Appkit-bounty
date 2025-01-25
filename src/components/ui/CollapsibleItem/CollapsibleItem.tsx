@@ -19,7 +19,10 @@ import { Button } from "../Button";
 import { COINGECKO_SOLANA_PRICE_URL } from "@/constants";
 import { convertCentsToSOL } from "@/app/utils/client/convertCentsToSol";
 import classNames from "classnames";
-import { useAppKitAccount } from "@reown/appkit/react";
+
+import { useAppKitConnection } from "@reown/appkit-adapter-solana/react";
+import { useAppKitAccount, useAppKitProvider } from "@reown/appkit/react";
+import type { Provider } from "@reown/appkit-adapter-solana/react";
 
 // Define the props for each item in the list
 type CollapsibleItemProps = {
@@ -60,19 +63,20 @@ export const CollapsibleItem: React.FC<CollapsibleItemProps> = ({
     COINGECKO_SOLANA_PRICE_URL,
     fetcher
   );
+  const { isConnected, address } = useAppKitAccount();
+  const { connection } = useAppKitConnection();
+  const { walletProvider } = useAppKitProvider<Provider>("solana");
+  //   const { publicKey, sendTransaction } = useWallet();
 
-  const { publicKey, sendTransaction } = useWallet();
-
-  const userWalletAddress = publicKey ? publicKey.toBase58() : null;
+  //   const userWalletAddress = publicKey ? publicKey.toBase58() : null;
   const isAuthor = () => {
-    return owner == userWalletAddress;
+    return owner == address;
   };
   const [isExpanded, setIsExpanded] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null); // Reference to the content div
   const [plainText, setPlainText] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [shouldRefetch, setShouldRefetch] = useState(false);
-  const { isConnected, address } = useAppKitAccount();
 
   const toggleExpansion = () => {
     setIsExpanded(!isExpanded);
@@ -105,56 +109,83 @@ export const CollapsibleItem: React.FC<CollapsibleItemProps> = ({
     }
   }, [encryption]);
 
-  const handlePayment = async (
-    nftId: string,
-    ownerAddress: string,
-    cents: number
-  ) => {
-    try {
-      if (!isConnected) {
-        alert("Please connect your wallet.");
-        return;
-      }
+  // function to send a TX
+  const handleSendTx = async () => {
+    const latestBlockhash = await connection?.getLatestBlockhash();
+    const wallet = new PublicKey(address);
 
-      // Check if the article is already paid for
-      const paidStatus = localStorage.getItem(nftId);
-      if (paidStatus === "1") {
-        alert("You have already paid for this article.");
-        return;
-      }
+    // create the transaction
+    const transaction = new Transaction({
+      feePayer: wallet,
+      recentBlockhash: latestBlockhash?.blockhash,
+    }).add(
+      SystemProgram.transfer({
+        fromPubkey: wallet,
+        toPubkey: new PublicKey(address), // destination address
+        lamports: 1000,
+      })
+    );
 
-      const solPrice = data.solana.usd;
-      const solAmount = convertCentsToSOL(2, solPrice);
+    // raise the modal
+    const signature = await walletProvider.sendTransaction(
+      transaction,
+      connection
+    );
 
-      const connection = new Connection(
-        "https://api.devnet.solana.com",
-        "finalized"
-      );
-      const recipient = new PublicKey(ownerAddress); // NFT owner's public key
-      const lamports = Math.ceil(solAmount * 1e9); // Convert SOL to lamports
-
-      // // Create a transaction to transfer SOL
-      const transaction = new Transaction().add(
-        SystemProgram.transfer({
-          fromPubkey: address,
-          toPubkey: recipient,
-          lamports,
-        })
-      );
-
-      // // Send transaction
-      const signature = await sendTransaction(transaction, connection);
-      console.log("Transaction signature:", signature);
-
-      // Update localStorage to mark the article as paid
-      localStorage.setItem(nftId, "1");
-      setShouldRefetch(true);
-
-      alert("Payment successful!");
-    } catch (error) {
-      alert(`Payment failed:, ${error}`);
-    }
+    // print the Transaction Signature
+    console.log(signature);
   };
+
+  //   const handlePayment = async (
+  //     nftId: string,
+  //     ownerAddress: string,
+  //     cents: number
+  //   ) => {
+  //     try {
+  //       if (!isConnected) {
+  //         alert("Please connect your wallet.");
+  //         return;
+  //       }
+
+  //       // Check if the article is already paid for
+  //       const paidStatus = localStorage.getItem(nftId);
+  //       if (paidStatus === "1") {
+  //         alert("You have already paid for this article.");
+  //         return;
+  //       }
+
+  //       const solPrice = data.solana.usd;
+  //       const solAmount = convertCentsToSOL(2, solPrice);
+
+  //       const connection = new Connection(
+  //         "https://api.devnet.solana.com",
+  //         "finalized"
+  //       );
+  //       const recipient = new PublicKey(ownerAddress); // NFT owner's public key
+  //       const lamports = Math.ceil(solAmount * 1e9); // Convert SOL to lamports
+
+  //       // // Create a transaction to transfer SOL
+  //       const transaction = new Transaction().add(
+  //         SystemProgram.transfer({
+  //           fromPubkey: address,
+  //           toPubkey: recipient,
+  //           lamports,
+  //         })
+  //       );
+
+  //       // // Send transaction
+  //       const signature = await sendTransaction(transaction, connection);
+  //       console.log("Transaction signature:", signature);
+
+  //       // Update localStorage to mark the article as paid
+  //       localStorage.setItem(nftId, "1");
+  //       setShouldRefetch(true);
+
+  //       alert("Payment successful!");
+  //     } catch (error) {
+  //       alert(`Payment failed:, ${error}`);
+  //     }
+  //   };
 
   // Use effect to fetch data when component mounts
   useEffect(() => {
@@ -224,7 +255,7 @@ export const CollapsibleItem: React.FC<CollapsibleItemProps> = ({
             {isAuthor() || localStorage.getItem(nftId) === "1" ? (
               plainText
             ) : (
-              <Button onClick={() => handlePayment(nftId, owner, 2)}>
+              <Button onClick={handleSendTx}>
                 Pay 0.02 USD in SOL to read
               </Button>
             )}
