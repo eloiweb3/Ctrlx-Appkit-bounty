@@ -64,3 +64,10 @@ Metaplex - OS NFT protocol for minting and managing NFTs.)*
 - **Hyun-Kyung (Julie) Yi** - Lead Developer, Full-Stack Developer.
 - **Ulrike Bloch** - Junior Full-Stack Developer.
 - **Emilie Drouot** - Junior Full-Stack Developer.
+
+## Screenshots
+<img width="1096" alt="image" src="https://github.com/user-attachments/assets/86ddb4c9-423c-4933-be76-85b9ee273b1f" />
+
+<img width="1088" alt="image" src="https://github.com/user-attachments/assets/1a3b5cea-55d9-4f6d-9d73-bf496a056f18" />
+
+
