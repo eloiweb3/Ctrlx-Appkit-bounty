@@ -50,6 +50,7 @@ bun dev
 
 - **Next.js** - React framework for building user interfaces and use api routes to create the Solana actions for Blink.
 - **TypeScript** - For type safety and code clarity.
+- **Reown-Appkit** - Onchain UX platform
 - **Blink (Solana)** - Blockchain link that turns any Solana action into a shareable, metadata-rich link.
 - **Metaplex** - OS NFT protocol for minting and managing NFTs.
 - **Phantom Wallet** - A popular NFT wallet for Solana-based assets.
@@ -61,6 +62,7 @@ Metaplex - OS NFT protocol for minting and managing NFTs.)*
 ## Team
 
 - **Arikia Millikan** - Journalism industry expert, Conceptual Lead, Project Lead, Founder of CTRL+X UG, Writer.
+- **Eloi Sanchez** -  CTO and Co-Founder.
 - **Hyun-Kyung (Julie) Yi** - Lead Developer, Full-Stack Developer.
 - **Ulrike Bloch** - Junior Full-Stack Developer.
 - **Emilie Drouot** - Junior Full-Stack Developer.
