@@ -5,7 +5,7 @@ import { solanaWeb3JsAdapter } from "@/reown-config";
 import { createAppKit } from "@reown/appkit";
 import { ReactNode } from "react";
 
-export const projectId = "3c4caba112912cc8eceea870da22c4f0";
+export const projectId = process.env.NEXT_PUBLIC_REOWN_API_KEY;
 
 if (!projectId) {
   throw new Error("Project Id is not defined.");

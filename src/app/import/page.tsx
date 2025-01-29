@@ -12,7 +12,7 @@ import { Upload } from "@/components/layout/Upload/Upload";
 import { useAppKitAccount } from "@reown/appkit/react";
 
 import style from "./page.module.css";
-import { ConnectWallet } from "@/components/ui/ConnectWallet";
+// import { ConnectWallet } from "@/components/ui/ConnectWallet";
 import { NFTCard } from "@/components/layout/NFTCard/NFTCard";
 import { CheckboxWithTerms } from "@/components/ui/Checkbox/Checkbox";
 
@@ -230,7 +230,7 @@ const Page = () => {
       </div>
       {currentStep === 0 && (
         <div>
-          <ConnectWallet />
+          {/* <ConnectWallet /> */}
           <Button disabled={!wallet || !isConnected} onClick={goToNextStep}>
             Continue with this wallet
           </Button>

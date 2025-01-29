@@ -7,7 +7,7 @@ import {
 } from "@solana/wallet-adapter-wallets";
 
 // Get projectId from https://cloud.reown.com
-export const projectId = "3c4caba112912cc8eceea870da22c4f0";
+export const projectId = process.env.NEXT_PUBLIC_REOWN_API_KEY;
 
 if (!projectId) {
   throw new Error("Project ID is not defined");

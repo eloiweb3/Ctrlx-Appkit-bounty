@@ -112,7 +112,7 @@ export const CollapsibleItem: React.FC<CollapsibleItemProps> = ({
   // function to send a TX
   const handleSendTx = async () => {
     const latestBlockhash = await connection?.getLatestBlockhash();
-    const wallet = new PublicKey(address);
+    const wallet = new PublicKey(address as string);
 
     // create the transaction
     const transaction = new Transaction({
@@ -121,7 +121,7 @@ export const CollapsibleItem: React.FC<CollapsibleItemProps> = ({
     }).add(
       SystemProgram.transfer({
         fromPubkey: wallet,
-        toPubkey: new PublicKey(address), // destination address
+        toPubkey: new PublicKey(address as string), // destination address
         lamports: 1000,
       })
     );
@@ -129,7 +129,7 @@ export const CollapsibleItem: React.FC<CollapsibleItemProps> = ({
     // raise the modal
     const signature = await walletProvider.sendTransaction(
       transaction,
-      connection
+      connection as Connection
     );
 
     // print the Transaction Signature
