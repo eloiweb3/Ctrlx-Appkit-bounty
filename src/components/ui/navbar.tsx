@@ -13,9 +13,6 @@ export default function Navbar() {
           <a href="/" className="text-gray-300 hover:text-white">
             Home
           </a>
-          <a href="/import" className="text-gray-300 hover:text-white">
-            Import
-          </a>
           <a href="/briefcase" className="text-gray-300 hover:text-white">
             Briefcase
           </a>
@@ -25,7 +22,6 @@ export default function Navbar() {
           <a href="/about" className="text-gray-300 hover:text-white">
             About
           </a>
-
           <ConnectButton />
         </div>
       </div>
