@@ -1,5 +1,7 @@
 # Decentralizing the Future of Digital Publishing
 
+[DEPLOYMENT](https://679a3e934650800008a04d36--fastidious-pithivier-470ea6.netlify.app/)
+
 ## Project Overview
 
 **Blocklicense** is a Web3 content licensing registry and relicensing marketplace specifically designed for text-based journalistic content. It enables authors to establish ownership of their work, facilitating downstream licensing transactions that extend these ownership rights with the author’s permission.
